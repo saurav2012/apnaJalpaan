@@ -1,4 +1,4 @@
-package com.food.apnajalpaanuser.model;
+package com.food.apnajalpaan.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

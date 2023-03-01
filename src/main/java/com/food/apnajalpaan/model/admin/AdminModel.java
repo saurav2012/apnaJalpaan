@@ -1,13 +1,11 @@
-package com.food.apnajalpaanuser.model.admin;
+package com.food.apnajalpaan.model.admin;
 
-import com.food.apnajalpaanuser.model.Address;
+import com.food.apnajalpaan.model.Address;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,5 +23,4 @@ public class AdminModel {
     private Integer age;
     private String gender;
     private Address addressModel;
-    private List<String> notificationIds;
 }

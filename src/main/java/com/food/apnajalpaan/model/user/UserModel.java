@@ -1,6 +1,6 @@
-package com.food.apnajalpaanuser.model.user;
+package com.food.apnajalpaan.model.user;
 
-import com.food.apnajalpaanuser.model.Address;
+import com.food.apnajalpaan.model.Address;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,8 +27,5 @@ public class UserModel {
     private String aniversary;
     private String profileImg;
     private Address address;
-    private List<String> orderIds;
-    private List<String> couponIds;
-    private List<String> reservationIds;
-    private List<String> notifications;
+    private List<String> couponIds;      // it cannot be user specific
 }

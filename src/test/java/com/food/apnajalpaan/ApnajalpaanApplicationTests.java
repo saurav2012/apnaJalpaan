@@ -1,4 +1,4 @@
-package com.food.apnajalpaanuser;
+package com.food.apnajalpaan;
 
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;

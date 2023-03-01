@@ -1,4 +1,4 @@
-package com.food.apnajalpaanuser;
+package com.food.apnajalpaan;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
