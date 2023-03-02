@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      database: ApnaJalPaanDB
+      host: localhost
+      port: 27017
+
+
+server:
+  port: 8080

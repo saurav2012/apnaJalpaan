@@ -18,9 +18,9 @@ public class AdminModel {
     private String password;
     private String firstName;
     private String lastName;
-    private Integer mobile;
+    private Long mobile;
     private String email;
     private Integer age;
     private String gender;
-    private Address addressModel;
+    private Address address;
 }
