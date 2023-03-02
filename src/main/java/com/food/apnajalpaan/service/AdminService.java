@@ -5,26 +5,21 @@ import com.food.apnajalpaan.repository.AdminRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Slf4j
 public class AdminService {
 
     @Autowired
-    private AdminRepository adminRepository;
+    private AdminRepository repository;
     public Mono<AdminModel> saveAdmin(Mono<AdminModel> adminModelMono){
-        return adminModelMono.flatMap(adminRepository::insert);
+        return adminModelMono.flatMap(repository::insert);
     }
 
     public Mono<AdminModel> updateAdmin(String adminId,Mono<AdminModel> adminModelMono){
-        return adminRepository.findById(adminId)
+        return repository.findById(adminId)
                 .flatMap(res -> {
                     return adminModelMono.flatMap(
                             x -> {
@@ -40,18 +35,19 @@ public class AdminService {
                                 return Mono.just(res);
                             });
                 })
-                .flatMap(adminRepository::save);
+                .flatMap(repository::save);
     }
 
     public Mono<String> deleteAdmin(String adminId){
-        adminRepository.deleteById(adminId);
+        repository.deleteById(adminId);
         return Mono.just("Admin is deleted successfully");
     }
 
     public Flux<AdminModel> getAllAdmin() {
-        return adminRepository.findAll();
+        return repository.findAll();
     }
     public Mono<AdminModel> getAdminByAdminId(String adminId) {
-        return adminRepository.findById(adminId);
+        return repository.findById(adminId);
     }
+
 }
