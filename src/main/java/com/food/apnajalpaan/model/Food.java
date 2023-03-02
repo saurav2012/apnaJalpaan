@@ -14,10 +14,10 @@ public class Food {
     @Id
     private String foodId;
     private String foodName;
-    private String foodImage;
     private Double foodCost;
     private String category;
     private String type;
     private Double rating;
     private Boolean isAvailable;
+    private Image foodImage;
 }
