@@ -7,12 +7,17 @@ import com.food.apnajalpaan.service.AdminService;
 import com.food.apnajalpaan.service.FoodService;
 import com.food.apnajalpaan.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
 @Slf4j
@@ -80,15 +85,13 @@ public class ApnaJalPaanController {
     }
 
 
-    // for image upload and download
+//     for image upload and download
     @PostMapping("/uploadImage")
-    public Mono<String> uploadImage(@RequestParam MultipartFile file) throws IOException{
-        imageService.uploadImage(file);
-        return Mono.just("Image Uploaded Successfully");
+    public Mono<String> uploadImage(@RequestParam("location") MultipartFile file){
+        Image image = new Image();
+        image.setName(file.getName());
+        System.out.println(file.getOriginalFilename());
+        return Mono.just("hiii");
     }
 
-    @GetMapping("/getImage/{filename}")
-    public Mono<byte[]> downloadImage(@PathVariable String fileName) {
-        return imageService.downloadImage(fileName);
-    }
 }

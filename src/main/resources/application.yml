@@ -4,11 +4,6 @@ spring:
       database: ApnaJalPaanDB
       host: localhost
       port: 27017
-  servlet:
-    multipart:
-      max-file-size: 15MB
-      max-request-size: 15MB
-      enabled: true
 
 
 server:

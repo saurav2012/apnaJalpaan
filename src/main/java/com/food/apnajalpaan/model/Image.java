@@ -1,6 +1,7 @@
 package com.food.apnajalpaan.model;
 
 import lombok.*;
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,5 +16,6 @@ public class Image {
     private String imageId;
     private String name;
     private String type;
-    private byte[] imageData;
+    private String location;
+    private String url;
 }
