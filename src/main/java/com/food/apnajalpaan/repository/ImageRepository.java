@@ -9,5 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface ImageRepository extends ReactiveMongoRepository<Image,String> {
-    Mono<Image> findByName(String fileName);
 }

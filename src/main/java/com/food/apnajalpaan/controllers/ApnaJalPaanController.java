@@ -7,21 +7,17 @@ import com.food.apnajalpaan.service.AdminService;
 import com.food.apnajalpaan.service.FoodService;
 import com.food.apnajalpaan.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.BsonBinarySubType;
-import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.core.MediaType;
-import java.io.IOException;
+import java.io.*;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ApnaJalPaanController {
     @Autowired
     AdminService adminService;
@@ -85,13 +81,16 @@ public class ApnaJalPaanController {
     }
 
 
-//     for image upload and download
     @PostMapping("/uploadImage")
-    public Mono<String> uploadImage(@RequestParam("location") MultipartFile file){
-        Image image = new Image();
-        image.setName(file.getName());
-        System.out.println(file.getOriginalFilename());
-        return Mono.just("hiii");
+    public Mono<Image> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+        System.out.print(file.getOriginalFilename()+" " + file.getName());
+
+        return imageService.saveImage(file);
+    }
+
+    @GetMapping("/getImage/{imageId}")
+    public Mono<Image> getImage(@PathVariable String imageId){
+        return imageService.downloadImage(imageId);
     }
 
 }

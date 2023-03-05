@@ -1,12 +1,9 @@
 package com.food.apnajalpaan.service;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 import com.food.apnajalpaan.model.Image;
-import com.food.apnajalpaan.model.admin.AdminModel;
 import com.food.apnajalpaan.repository.ImageRepository;
-import com.food.apnajalpaan.utils.ImageUitls;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -27,23 +22,34 @@ public class ImageService {
     @Autowired
     ImageRepository repository;
 
-    public Mono<Image> saveImage(Mono<Image> imageMono) {
+    public Mono<Image> saveImage(MultipartFile file) throws IOException {
+        Image image = new Image();
+        Dotenv dotenv = Dotenv.load();
+        Cloudinary cloudinary = new Cloudinary(dotenv.get("CLOUDINARY_URL"));
+        cloudinary.config.secure = true;
+        try {
+            // Upload the image
+            Map params1 = ObjectUtils.asMap(file.getOriginalFilename(), true, "unique_filename", false, "overwrite", true);
+            Map uploadResult  = cloudinary.uploader().upload(file.getBytes(), params1);
+            String publicId = uploadResult.get("public_id").toString();
+            image.setPublicId(publicId);
+            image.setName(funtionSplitString(file.getOriginalFilename()));
+            image.setUrl(cloudinary.url().secure(true).format("jpg").publicId(publicId).generate());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return repository.insert(image);
+    }
 
-        return imageMono.flatMap(
-                res -> {
-                    Dotenv dotenv = Dotenv.load();
-                    Cloudinary cloudinary = new Cloudinary(dotenv.get("CLOUDINARY_URL"));
-                    cloudinary.config.secure = true;
-                    try {
-                        // Upload the image
-                        Map params1 = ObjectUtils.asMap("use_filename", true, "unique_filename", false, "overwrite", true);
-                        cloudinary.uploader().upload(res.getLocation(), params1);
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                    res.setUrl(cloudinary.url().generate(res.getName()));
-                    return Mono.just(res);
-                }).flatMap(repository::insert);
+    private String funtionSplitString(String originalFilename) {
+        String[] arrOfStr = originalFilename.split(".jpg");
+        String result = "";
+        for (String a : arrOfStr) result = result.concat(a);
+        return result;
+    }
+
+    public Mono<Image> downloadImage(String imageId){
+        return repository.findById(imageId);
     }
     public Mono<String> deleteImage(String imageId){
         repository.deleteById(imageId);

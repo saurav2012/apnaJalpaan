@@ -15,7 +15,6 @@ public class Image {
     @Id
     private String imageId;
     private String name;
-    private String type;
-    private String location;
     private String url;
+    private String publicId;
 }
