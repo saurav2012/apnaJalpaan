@@ -37,7 +37,7 @@ public class ApnaJalPaanController {
         return adminService.getAdminByAdminId(adminId);
     }
 
-    @PostMapping("/admin/register")
+    @PostMapping("/admin/save")
     public Mono<AdminModel> saveAdmin(@RequestBody Mono<AdminModel> adminModelRequest){
         return adminService.saveAdmin(adminModelRequest);
     }
@@ -64,7 +64,7 @@ public class ApnaJalPaanController {
         return foodService.getFoodByFoodId(foodId);
     }
 
-    @PostMapping("/food/register")
+    @PostMapping("/food/save")
     public Mono<Food> saveFood(@RequestBody Mono<Food> foodMono){
         return foodService.saveFood(foodMono);
     }
@@ -76,21 +76,32 @@ public class ApnaJalPaanController {
     }
 
     @DeleteMapping("/food/delete/{foodId}")
-    public Mono<String> deleteFood(@PathVariable String foodId){
+    public Mono<Void> deleteFood(@PathVariable String foodId){
         return foodService.deleteFood(foodId);
     }
 
 
-    @PostMapping("/uploadImage")
-    public Mono<Image> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping("/image/save")
+    public Mono<Image> saveImage(@RequestParam("file") MultipartFile file) throws IOException {
         System.out.print(file.getOriginalFilename()+" " + file.getName());
 
         return imageService.saveImage(file);
     }
 
-    @GetMapping("/getImage/{imageId}")
+    @GetMapping("/image/{imageId}")
     public Mono<Image> getImage(@PathVariable String imageId){
         return imageService.downloadImage(imageId);
+    }
+
+    @GetMapping("/image")
+    public Flux<Image> getAllImage(){
+        return imageService.getAllImages();
+    }
+
+    // delete food by public Id
+    @DeleteMapping("/image/delete/{publicId}")
+    public Mono<Void> deleteImage(@PathVariable String publicId) throws IOException {
+        return imageService.deleteImage(publicId);
     }
 
 }

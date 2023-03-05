@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -51,9 +52,12 @@ public class ImageService {
     public Mono<Image> downloadImage(String imageId){
         return repository.findById(imageId);
     }
-    public Mono<String> deleteImage(String imageId){
-        repository.deleteById(imageId);
-        return Mono.just("Image is deleted successfully");
+    public Mono<Void> deleteImage(String publicId) throws IOException {
+        Dotenv dotenv = Dotenv.load();
+        Cloudinary cloudinary = new Cloudinary(dotenv.get("CLOUDINARY_URL"));
+        cloudinary.config.secure = true;
+        cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+        return repository.deleteByPublicId(publicId);
     }
 
     public Flux<Image> getAllImages() {

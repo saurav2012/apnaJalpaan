@@ -36,9 +36,8 @@ public class FoodService {
                 .flatMap(repository::save);
     }
 
-    public Mono<String> deleteFood(String foodId){
-        repository.deleteById(foodId);
-        return Mono.just("Food item deleted successfully");
+    public Mono<Void> deleteFood(String foodId){
+        return repository.deleteById(foodId);
     }
 
     public Flux<Food> getAllFood() {
