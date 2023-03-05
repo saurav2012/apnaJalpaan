@@ -1,13 +1,13 @@
 package com.food.apnajalpaan.model.user;
 
 import com.food.apnajalpaan.model.Address;
+import com.food.apnajalpaan.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -17,15 +17,18 @@ import java.util.List;
 public class UserModel {
     @Id
     private String userId;
-    private String name;
+    private String username;
     private String password;
     private String firstName;
     private String lastName;
-    private Integer phoneNo;
-    private LocalDate birthday;
+    private Long mobile;
     private String email;
+    private Integer age;
+    private String gender;
+    private String birthdate;
     private String aniversary;
-    private String profileImg;
+    private String profileImageId;
     private Address address;
-    private List<String> couponIds;      // it cannot be user specific
+    private List<String> couponIds;
+    private Role role;
 }

@@ -2,8 +2,8 @@ package com.food.apnajalpaan.controllers;
 
 import com.food.apnajalpaan.model.Food;
 import com.food.apnajalpaan.model.Image;
-import com.food.apnajalpaan.model.admin.AdminModel;
-import com.food.apnajalpaan.service.AdminService;
+import com.food.apnajalpaan.model.user.UserModel;
+import com.food.apnajalpaan.service.UserService;
 import com.food.apnajalpaan.service.FoodService;
 import com.food.apnajalpaan.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,37 +20,37 @@ import java.io.*;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ApnaJalPaanController {
     @Autowired
-    AdminService adminService;
+    UserService userService;
     @Autowired
     FoodService foodService;
     @Autowired
     ImageService imageService;
 
-    // admin endpoints
-    @GetMapping("/admin")
-    public Flux<AdminModel> getAllAdmin(){
-        return adminService.getAllAdmin();
+    // user endpoints
+    @GetMapping("/user")
+    public Flux<UserModel> getAllUser(){
+        return userService.getAllUser();
     }
 
-    @GetMapping("/admin/{adminId}")
-    public Mono<AdminModel> getAdminByAdminId(@PathVariable String adminId){
-        return adminService.getAdminByAdminId(adminId);
+    @GetMapping("/user/{userId}")
+    public Mono<UserModel> getUserByUserId(@PathVariable String userId){
+        return userService.getUserByUserId(userId);
     }
 
-    @PostMapping("/admin/save")
-    public Mono<AdminModel> saveAdmin(@RequestBody Mono<AdminModel> adminModelRequest){
-        return adminService.saveAdmin(adminModelRequest);
+    @PostMapping("/user/save")
+    public Mono<UserModel> saveUser(@RequestBody Mono<UserModel> userModelRequest){
+        return userService.saveUser(userModelRequest);
     }
 
-    @PutMapping("/admin/update/{adminId}")
-    public Mono<AdminModel> updateAdmin(@RequestBody Mono<AdminModel> adminModelRequest, @PathVariable String adminId)
+    @PutMapping("/user/update/{userId}")
+    public Mono<UserModel> updateUser(@RequestBody Mono<UserModel> userModelRequest, @PathVariable String userId)
     {
-        return adminService.updateAdmin(adminId,adminModelRequest);
+        return userService.updateUser(userId,userModelRequest);
     }
 
-    @DeleteMapping("/admin/delete/{adminId}")
-    public Mono<String> deleteAdmin(@PathVariable String adminId){
-        return adminService.deleteAdmin(adminId);
+    @DeleteMapping("/user/delete/{userId}")
+    public Mono<String> deleteUser(@PathVariable String userId){
+        return userService.deleteUser(userId);
     }
 
     //  Endpoint for food

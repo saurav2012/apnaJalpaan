@@ -1,7 +1,7 @@
 package com.food.apnajalpaan.service;
 
-import com.food.apnajalpaan.model.admin.AdminModel;
-import com.food.apnajalpaan.repository.AdminRepository;
+import com.food.apnajalpaan.model.user.UserModel;
+import com.food.apnajalpaan.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,18 +10,18 @@ import reactor.core.publisher.Mono;
 
 @Service
 @Slf4j
-public class AdminService {
+public class UserService {
 
     @Autowired
-    private AdminRepository repository;
-    public Mono<AdminModel> saveAdmin(Mono<AdminModel> adminModelMono){
-        return adminModelMono.flatMap(repository::insert);
+    private UserRepository repository;
+    public Mono<UserModel> saveUser(Mono<UserModel> userModelMono){
+        return userModelMono.flatMap(repository::insert);
     }
 
-    public Mono<AdminModel> updateAdmin(String adminId,Mono<AdminModel> adminModelMono){
-        return repository.findById(adminId)
+    public Mono<UserModel> updateUser(String userId, Mono<UserModel> userModelMono){
+        return repository.findById(userId)
                 .flatMap(res -> {
-                    return adminModelMono.flatMap(
+                    return userModelMono.flatMap(
                             x -> {
                                 if(x.getUsername()!=null) res.setUsername(x.getUsername());
                                 if(x.getAge()!=null) res.setAge(x.getAge());
@@ -38,16 +38,16 @@ public class AdminService {
                 .flatMap(repository::save);
     }
 
-    public Mono<String> deleteAdmin(String adminId){
-        repository.deleteById(adminId);
-        return Mono.just("Admin is deleted successfully");
+    public Mono<String> deleteUser(String userId){
+        repository.deleteById(userId);
+        return Mono.just("user is deleted successfully");
     }
 
-    public Flux<AdminModel> getAllAdmin() {
+    public Flux<UserModel> getAllUser() {
         return repository.findAll();
     }
-    public Mono<AdminModel> getAdminByAdminId(String adminId) {
-        return repository.findById(adminId);
+    public Mono<UserModel> getUserByUserId(String userId) {
+        return repository.findById(userId);
     }
 
 }
