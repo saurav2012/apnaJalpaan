@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
 import java.io.*;
 
 @Slf4j
@@ -38,7 +39,7 @@ public class ApnaJalPaanController {
     }
 
     @PostMapping("/user/save")
-    public Mono<UserModel> saveUser(@RequestBody Mono<UserModel> userModelRequest){
+    public Mono<UserModel> saveUser(@Valid @RequestBody Mono<UserModel> userModelRequest) {
         return userService.saveUser(userModelRequest);
     }
 

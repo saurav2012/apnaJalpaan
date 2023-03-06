@@ -5,9 +5,13 @@ import com.food.apnajalpaan.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
@@ -17,11 +21,20 @@ import java.util.List;
 public class UserModel {
     @Id
     private String userId;
+
+    @NotEmpty(message = "Username must be present")
     private String username;
+
+    @NotEmpty
+    @Size(min = 8,max=14,message = "Password must be between 8-14 characters!")
     private String password;
+
+    @NotEmpty
+    @Size(min = 3,message = "First name must be min of 3 characters!")
     private String firstName;
     private String lastName;
     private Long mobile;
+    @Email(message = "Enter a valid email")
     private String email;
     private Integer age;
     private String gender;
