@@ -5,6 +5,7 @@ import com.food.apnajalpaan.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,7 +17,18 @@ public class UserService {
     @Autowired
     private UserRepository repository;
     public Mono<UserModel> saveUser(Mono<UserModel> userModelMono){
-//        userModelMono.flatMap(repository::insert);
+//        return userModelMono.flatMap(repository::insert).flatMap(
+//                res -> {
+//                    return repository.findByEmail(res.getEmail()).hasElement().flatMap(
+//                            check -> {
+//                                if(Boolean.TRUE.equals(check)){
+//                                    return Mono.error(new Exception("hi"));
+//                                }
+//                                else return userModelMono;
+//                            }
+//                    );
+//                }
+//        ).flatMap(repository::insert);
         return userModelMono.flatMap(repository::insert);
     }
 

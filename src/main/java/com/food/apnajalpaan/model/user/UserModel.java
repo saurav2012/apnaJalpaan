@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
@@ -32,10 +34,14 @@ public class UserModel {
     @NotEmpty
     @Size(min = 3,message = "First name must be min of 3 characters!")
     private String firstName;
+
     private String lastName;
     private Long mobile;
+
     @Email(message = "Enter a valid email")
+    @Indexed(unique = true)
     private String email;
+
     private Integer age;
     private String gender;
     private String birthdate;
