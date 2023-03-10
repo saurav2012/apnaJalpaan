@@ -1,5 +1,6 @@
 package com.food.apnajalpaan.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.food.apnajalpaan.model.Address;
 import com.food.apnajalpaan.model.Role;
 import lombok.*;
@@ -29,6 +30,7 @@ public class UserModel implements UserDetails {
 
     @NotEmpty
     @Size(min = 8,max=14,message = "Password must be between 8-14 characters!")
+    @JsonIgnore
     private String password;
 
     @NotEmpty
