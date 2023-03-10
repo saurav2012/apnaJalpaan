@@ -8,6 +8,7 @@ import com.food.apnajalpaan.service.FoodService;
 import com.food.apnajalpaan.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
@@ -29,8 +30,14 @@ public class ApnaJalPaanController {
 
     // user endpoints
     @GetMapping("/user")
+    @PreAuthorize("hasRole('ADMIN')")
     public Flux<UserModel> getAllUser(){
         return userService.getAllUser();
+    }
+
+    @GetMapping("/welcome")
+    public Mono<String> get(){
+        return Mono.just("Welcome");
     }
 
     @GetMapping("/user/{userId}")
