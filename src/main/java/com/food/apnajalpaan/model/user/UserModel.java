@@ -3,7 +3,6 @@ package com.food.apnajalpaan.model.user;
 import com.food.apnajalpaan.model.Address;
 import com.food.apnajalpaan.model.Role;
 import lombok.*;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,10 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -55,18 +51,20 @@ public class UserModel implements UserDetails {
     private String profileImageId;
     private Address address;
     private List<String> couponIds;
-    private Set<Role> roles = new HashSet<>();
+    private Role role;
     private Boolean isActive;
+    Collection authoritiesList;
 
     public UserModel(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
+        this.authoritiesList = authorities;
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map((role) -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
+        return authoritiesList;
     }
 
     @Override

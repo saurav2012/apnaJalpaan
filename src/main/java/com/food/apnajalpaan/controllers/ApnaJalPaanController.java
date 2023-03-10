@@ -30,12 +30,13 @@ public class ApnaJalPaanController {
 
     // user endpoints
     @GetMapping("/user")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Flux<UserModel> getAllUser(){
         return userService.getAllUser();
     }
 
     @GetMapping("/welcome")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Mono<String> get(){
         return Mono.just("Welcome");
     }
