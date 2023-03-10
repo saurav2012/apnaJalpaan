@@ -25,7 +25,6 @@ public class UserService {
                     return Mono.just(res);
                 }
         ).flatMap(repository::insert);
-//        return userModelMono.flatMap(repository::insert);
     }
 
     public Mono<UserModel> updateUser(String userId, Mono<UserModel> userModelMono){

@@ -1,6 +1,5 @@
 package com.food.apnajalpaan.Exception;
 
-import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoWriteException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
