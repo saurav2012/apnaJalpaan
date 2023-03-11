@@ -14,12 +14,12 @@ import java.time.LocalTime;
 @Document(collection = "restaurant")
 public class Restaurant {
     @Id
-    private String hotel_id;
+    private String restaurantId;
     private String name;
     private String description;
-    private LocalTime openTiming;
-    private LocalTime closeTiming;
+    private String openTiming;
+    private String closeTiming;
     private String location;
     private String email;
-    private Integer phoneNo;
+    private Long contact;
 }

@@ -1,9 +1,6 @@
 package com.food.apnajalpaan.controllers;
 
-import com.food.apnajalpaan.model.Food;
-import com.food.apnajalpaan.model.Image;
-import com.food.apnajalpaan.model.Order;
-import com.food.apnajalpaan.model.Reservation;
+import com.food.apnajalpaan.model.*;
 import com.food.apnajalpaan.model.user.UserModel;
 import com.food.apnajalpaan.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +29,10 @@ public class ApnaJalPaanController {
     ReservationService reservationService;
     @Autowired
     OrderService orderService;
+    @Autowired
+    CouponService couponService;
+    @Autowired
+    RestaurantService restaurantService;
 
     // user endpoints
     @GetMapping("/user")
@@ -173,5 +174,58 @@ public class ApnaJalPaanController {
     {
         return orderService.updateOrder(orderId,orderModelMono);
     }
+
+    //end point for coupon
+    @PostMapping("/coupon/save")
+    public Mono<Coupon> saveCoupon(@RequestBody Mono<Coupon> couponModelMono){
+        return couponService.saveCoupon(couponModelMono);
+    }
+    @GetMapping("/coupon")
+    public Flux<Coupon> getAllCoupon(){
+        return couponService.getAllCoupon();
+    }
+
+    @GetMapping("/coupon/{couponId}")
+    public Mono<Coupon> getCouponByCouponId(@PathVariable String couponId){
+        return couponService.getCouponByCouponId(couponId);
+    }
+
+    @DeleteMapping("/coupon/delete/{couponId}")
+    public Mono<Void> deleteCoupon(@PathVariable String couponId){
+        return couponService.deleteCoupon(couponId);
+    }
+
+    @PutMapping("/coupon/update/{couponId}")
+    public Mono<Coupon> updateCoupon(@RequestBody Mono<Coupon> couponModelMono, @PathVariable String couponId)
+    {
+        return couponService.updateCoupon(couponId,couponModelMono);
+    }
+
+    // endpoint for restaurant
+    @PostMapping("/restaurant/save")
+    public Mono<Restaurant> saveRestaurant(@RequestBody Mono<Restaurant> restaurantModelMono){
+        return restaurantService.saveRestaurant(restaurantModelMono);
+    }
+    @GetMapping("/restaurant")
+    public Flux<Restaurant> getAllRestaurant(){
+        return restaurantService.getAllRestaurant();
+    }
+
+    @GetMapping("/restaurant/{restaurantId}")
+    public Mono<Restaurant> getRestaurantByRestaurantId(@PathVariable String restaurantId){
+        return restaurantService.getRestaurantByRestaurantId(restaurantId);
+    }
+
+    @DeleteMapping("/restaurant/delete/{restaurantId}")
+    public Mono<Void> deleteRestaurant(@PathVariable String restaurantId){
+        return restaurantService.deleteRestaurant(restaurantId);
+    }
+
+    @PutMapping("/restaurant/update/{restaurantId}")
+    public Mono<Restaurant> updateRestaurant(@RequestBody Mono<Restaurant> restaurantModelMono, @PathVariable String restaurantId)
+    {
+        return restaurantService.updateRestaurant(restaurantId,restaurantModelMono);
+    }
+
 
 }

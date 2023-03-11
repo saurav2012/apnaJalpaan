@@ -27,7 +27,7 @@ public class RestaurantService {
                                 if(x.getLocation()!=null) res.setLocation(x.getLocation());
                                 if(x.getCloseTiming()!=null) res.setCloseTiming(x.getCloseTiming());
                                 if(x.getOpenTiming()!=null) res.setOpenTiming(x.getOpenTiming());
-                                if(x.getPhoneNo()!=null) res.setPhoneNo(x.getPhoneNo());
+                                if(x.getContact()!=null) res.setContact(x.getContact());
                                 return Mono.just(res);
                             });
                 })
