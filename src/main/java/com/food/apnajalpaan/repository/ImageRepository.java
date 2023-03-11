@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ImageRepository extends ReactiveMongoRepository<Image,String> {
     public Mono<Void> deleteByPublicId(String publicId);
+    public Mono<Image> findByName(String name);
 }

@@ -19,5 +19,5 @@ public class Food {
     private String type;
     private Double rating;
     private Boolean isAvailable;
-    private Image foodImage;
+    private String imageId;
 }
