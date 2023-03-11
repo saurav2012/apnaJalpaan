@@ -8,13 +8,17 @@ import io.github.cdimascio.dotenv.Dotenv;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 import java.io.IOException;
+
 import java.util.Map;
-import java.util.Optional;
+
 
 @Service
 @Slf4j
@@ -23,23 +27,43 @@ public class ImageService {
     @Autowired
     ImageRepository repository;
 
-    public Mono<Image> saveImage(MultipartFile file) throws IOException {
+
+    public Mono<Image> saveImage(FilePart file) throws IOException, InterruptedException {
         Image image = new Image();
         Dotenv dotenv = Dotenv.load();
         Cloudinary cloudinary = new Cloudinary(dotenv.get("CLOUDINARY_URL"));
         cloudinary.config.secure = true;
-        try {
-            // Upload the image
-            Map params1 = ObjectUtils.asMap(file.getOriginalFilename(), true, "unique_filename", false, "overwrite", true);
-            Map uploadResult  = cloudinary.uploader().upload(file.getBytes(), params1);
-            String publicId = uploadResult.get("public_id").toString();
-            image.setPublicId(publicId);
-            image.setName(funtionSplitString(file.getOriginalFilename()));
-            image.setUrl(cloudinary.url().secure(true).format("jpg").publicId(publicId).generate());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        final String[] publicId = {""};
+        mergeDataBuffers(file.content()).flatMap(
+                res -> {
+                    try {
+                        // Upload the image
+                        Map params1 = ObjectUtils.asMap(file.filename(), true, "unique_filename", false, "overwrite", true);
+                        Map uploadResult  = cloudinary.uploader().upload(res, params1);
+                        publicId[0]=(uploadResult.get("public_id").toString());
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    return Mono.empty();
+                }
+        ).subscribe();
+
+        Thread.sleep(600000);
+        image.setPublicId(publicId[0]);
+        image.setUrl(cloudinary.url().secure(true).format("jpg").publicId(publicId[0]).generate());
+        image.setName(funtionSplitString(file.filename()));
         return repository.insert(image);
+    }
+
+
+    Mono<byte[]> mergeDataBuffers(Flux<DataBuffer> dataBufferFlux) {
+        return DataBufferUtils.join(dataBufferFlux)
+                .map(dataBuffer -> {
+                    byte[] bytes = new byte[dataBuffer.readableByteCount()];
+                    dataBuffer.read(bytes);
+                    DataBufferUtils.release(dataBuffer);
+                    return bytes;
+                });
     }
 
     private String funtionSplitString(String originalFilename) {

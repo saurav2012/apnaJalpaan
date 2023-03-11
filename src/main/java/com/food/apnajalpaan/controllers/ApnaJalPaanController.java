@@ -8,6 +8,8 @@ import com.food.apnajalpaan.service.FoodService;
 import com.food.apnajalpaan.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,11 +92,15 @@ public class ApnaJalPaanController {
     }
 
 
-    @PostMapping("/image/save")
-    public Mono<Image> saveImage(@RequestParam("file") MultipartFile file) throws IOException {
-        System.out.print(file.getOriginalFilename()+" " + file.getName());
-
-        return imageService.saveImage(file);
+    @PostMapping(value = "/image/save",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<Image> saveImage(@RequestPart("file")Mono<FilePart> part) throws IOException {
+        return part.flatMap(file -> {
+            try {
+                return imageService.saveImage(file);
+            } catch (IOException | InterruptedException e ) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @GetMapping("/image/{imageId}")
