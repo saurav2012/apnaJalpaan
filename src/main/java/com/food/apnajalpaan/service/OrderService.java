@@ -1,6 +1,5 @@
 package com.food.apnajalpaan.service;
 
-import com.food.apnajalpaan.model.Food;
 import com.food.apnajalpaan.model.Order;
 import com.food.apnajalpaan.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,17 +8,12 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @Slf4j
 public class OrderService {
     @Autowired
     OrderRepository repository;
-    @Autowired
-    FoodService foodService;
+
     
     public Mono<Order> saveOrder(Mono<Order> orderMono){
         return orderMono.flatMap(repository::insert);
