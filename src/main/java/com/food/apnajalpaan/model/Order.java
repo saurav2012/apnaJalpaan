@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,6 +17,6 @@ public class Order {
     private String orderId;
     private String userId;
     private Double amount;
-    private String numOfFoodItem;
-    private LocalDate date;
+    private List<String> foodIds;
+    private String date;
 }

@@ -2,19 +2,16 @@ package com.food.apnajalpaan.controllers;
 
 import com.food.apnajalpaan.model.Food;
 import com.food.apnajalpaan.model.Image;
+import com.food.apnajalpaan.model.Order;
 import com.food.apnajalpaan.model.Reservation;
 import com.food.apnajalpaan.model.user.UserModel;
-import com.food.apnajalpaan.service.ReservationService;
-import com.food.apnajalpaan.service.UserService;
-import com.food.apnajalpaan.service.FoodService;
-import com.food.apnajalpaan.service.ImageService;
+import com.food.apnajalpaan.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -33,6 +30,8 @@ public class ApnaJalPaanController {
     ImageService imageService;
     @Autowired
     ReservationService reservationService;
+    @Autowired
+    OrderService orderService;
 
     // user endpoints
     @GetMapping("/user")
@@ -147,6 +146,32 @@ public class ApnaJalPaanController {
     public Mono<Reservation> updateReservation(@RequestBody Mono<Reservation> reservationMono, @PathVariable String reservationId)
     {
         return reservationService.updateReservation(reservationId,reservationMono);
+    }
+
+    // endpoint for order
+    @PostMapping("/order/save")
+    public Mono<Order> saveOrder(@RequestBody Mono<Order> orderModelMono){
+        return orderService.saveOrder(orderModelMono);
+    }
+    @GetMapping("/order")
+    public Flux<Order> getAllOrder(){
+        return orderService.getAllOrder();
+    }
+
+    @GetMapping("/order/{orderId}")
+    public Mono<Order> getOrderByOrderId(@PathVariable String orderId){
+        return orderService.getOrderByOrderId(orderId);
+    }
+
+    @DeleteMapping("/order/delete/{orderId}")
+    public Mono<Void> deleteOrder(@PathVariable String orderId){
+        return orderService.deleteOrder(orderId);
+    }
+
+    @PutMapping("/order/update/{orderId}")
+    public Mono<Order> updateOrder(@RequestBody Mono<Order> orderModelMono, @PathVariable String orderId)
+    {
+        return orderService.updateOrder(orderId,orderModelMono);
     }
 
 }
