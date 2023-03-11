@@ -2,7 +2,9 @@ package com.food.apnajalpaan.controllers;
 
 import com.food.apnajalpaan.model.Food;
 import com.food.apnajalpaan.model.Image;
+import com.food.apnajalpaan.model.Reservation;
 import com.food.apnajalpaan.model.user.UserModel;
+import com.food.apnajalpaan.service.ReservationService;
 import com.food.apnajalpaan.service.UserService;
 import com.food.apnajalpaan.service.FoodService;
 import com.food.apnajalpaan.service.ImageService;
@@ -29,6 +31,8 @@ public class ApnaJalPaanController {
     FoodService foodService;
     @Autowired
     ImageService imageService;
+    @Autowired
+    ReservationService reservationService;
 
     // user endpoints
     @GetMapping("/user")
@@ -104,7 +108,7 @@ public class ApnaJalPaanController {
     }
 
     @GetMapping("/image/{imageId}")
-    public Mono<Image> getImage(@PathVariable String imageId){
+    public Mono<Image> getImageByImageId(@PathVariable String imageId){
         return imageService.downloadImage(imageId);
     }
 
@@ -117,6 +121,32 @@ public class ApnaJalPaanController {
     @DeleteMapping("/image/delete/{publicId}")
     public Mono<Void> deleteImage(@PathVariable String publicId) throws IOException {
         return imageService.deleteImage(publicId);
+    }
+
+    //Reservation endpoints
+    @PostMapping("/reservation/save")
+    public Mono<Reservation> saveReservation(@RequestBody Mono<Reservation> reservationMono){
+        return reservationService.saveReservation(reservationMono);
+    }
+    @GetMapping("/reservation")
+    public Flux<Reservation> getAllReservation(){
+        return reservationService.getAllReservation();
+    }
+
+    @GetMapping("/reservation/{reservationId}")
+    public Mono<Reservation> getReservationByReservationId(@PathVariable String reservationId){
+        return reservationService.getReservationByReservationId(reservationId);
+    }
+
+    @DeleteMapping("/reservation/delete/{reservationId}")
+    public Mono<Void> deleteReservation(@PathVariable String reservationId){
+        return reservationService.deleteReservation(reservationId);
+    }
+
+    @PutMapping("/reservation/update/{reservationId}")
+    public Mono<Reservation> updateReservation(@RequestBody Mono<Reservation> reservationMono, @PathVariable String reservationId)
+    {
+        return reservationService.updateReservation(reservationId,reservationMono);
     }
 
 }

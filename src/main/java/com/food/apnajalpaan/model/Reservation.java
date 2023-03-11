@@ -16,10 +16,10 @@ import java.time.LocalTime;
 public class Reservation {
     @Id
     private String reservationId;
-    private String userId;          // id of user
+    private String username;          // username of user
     private String reservationType;
-    private LocalDateTime date;
+    private String date;
     private Integer numOfGuest;
-    private LocalTime time;
+    private String time;
     private Boolean isConfirmed;
 }
