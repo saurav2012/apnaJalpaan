@@ -14,6 +14,7 @@ public class RestaurantService {
 
     public Mono<Restaurant> saveRestaurant(Mono<Restaurant> restaurantMono){
         return restaurantMono.flatMap(repository::insert);
+        // email-service -
     }
 
     public Mono<Restaurant> updateRestaurant(String restaurantId, Mono<Restaurant> restaurantMono){

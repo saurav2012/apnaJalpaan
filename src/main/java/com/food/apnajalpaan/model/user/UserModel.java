@@ -28,9 +28,8 @@ public class UserModel implements UserDetails {
     @NotEmpty(message = "Username must be present")
     private String username;
 
-    @NotEmpty
+    @NotEmpty(message = "Enter your password")
     @Size(min = 8,max=14,message = "Password must be between 8-14 characters!")
-    @JsonIgnore
     private String password;
 
     @NotEmpty

@@ -59,4 +59,8 @@ public class UserService {
         return repository.findById(userId);
     }
 
+    public Mono<UserModel> getUserByUsername(String username){
+        return repository.findByUsername(username);
+    }
+
 }

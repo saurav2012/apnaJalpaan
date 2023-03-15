@@ -51,6 +51,10 @@ public class ApnaJalPaanController {
     public Mono<UserModel> getUserByUserId(@PathVariable String userId){
         return userService.getUserByUserId(userId);
     }
+    @GetMapping("/user/{username}")
+    public Mono<UserModel> getUserByUsername(@PathVariable String username){
+        return userService.getUserByUsername(username);
+    }
 
     @PostMapping("/user/save")
     public Mono<UserModel> saveUser(@Valid @RequestBody Mono<UserModel> userModelRequest) {
@@ -149,6 +153,16 @@ public class ApnaJalPaanController {
         return reservationService.updateReservation(reservationId,reservationMono);
     }
 
+    @PostMapping("/reservation/approve/{reservationId}")
+    public Mono<Reservation> approveReservation(@RequestBody Mono<Reservation> reservationMono,@PathVariable String reservationId){
+        return reservationService.approveReservationByAdmin(reservationId,reservationMono);
+    }
+
+    @PostMapping("/reservation/deny/{reservationId}")
+    public Mono<Reservation> denyReservation(@RequestBody Mono<Reservation> reservationMono,@PathVariable String reservationId){
+        return reservationService.denyReservationByAdmin(reservationId,reservationMono);
+    }
+
     // endpoint for order
     @PostMapping("/order/save")
     public Mono<Order> saveOrder(@RequestBody Mono<Order> orderModelMono){
@@ -226,6 +240,7 @@ public class ApnaJalPaanController {
     {
         return restaurantService.updateRestaurant(restaurantId,restaurantModelMono);
     }
+
 
 
 }

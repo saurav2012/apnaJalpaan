@@ -3,6 +3,7 @@ package com.food.apnajalpaan.Exception;
 import com.mongodb.MongoWriteException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,6 +31,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MongoWriteException.class)
     public ResponseEntity<Mono<String>> handleDuplicateKeyException(MongoWriteException ex){
         return new ResponseEntity<>(Mono.just("Already exist"),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Mono<String>> handleUsernameNotFoundException(UsernameNotFoundException ex){
+        return new ResponseEntity<>(Mono.just("Username not found"),HttpStatus.BAD_REQUEST);
     }
 
 }
