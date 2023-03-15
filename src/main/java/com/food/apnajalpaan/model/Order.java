@@ -16,7 +16,7 @@ public class Order {
     @Id
     private String orderId;
     private String userId;
-    private Double amount;
+    private Double amount = 0.0;
     private List<String> foodIds;
     private String date;
 }
