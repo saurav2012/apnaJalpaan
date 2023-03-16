@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class FoodService {
@@ -58,6 +60,10 @@ public class FoodService {
     }
     public Mono<Food> getFoodByFoodId(String foodId) {
         return repository.findById(foodId);
+    }
+
+    public Flux<Food> findAllById(List<String> ids){
+        return repository.findAllById(ids);
     }
 
 }

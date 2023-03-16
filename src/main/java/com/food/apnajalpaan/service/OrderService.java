@@ -1,5 +1,6 @@
 package com.food.apnajalpaan.service;
 
+import com.food.apnajalpaan.model.Food;
 import com.food.apnajalpaan.model.Order;
 import com.food.apnajalpaan.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -20,23 +23,19 @@ public class OrderService {
 
     
     public Mono<Order> saveOrder(Mono<Order> orderMono){
-        Double[] amt = {0.0};
+        final Double[] amt = {0.0};
         return orderMono.flatMap(
-                order -> {
-                    order.getFoodIds().forEach((foodId) -> {
-                        foodService.getFoodByFoodId(foodId).flatMap(
-                                food -> {
-                                    Double x = order.getAmount();
-                                    amt[0] = x + food.getFoodCost();
-                                    order.setAmount(amt[0]);
-                                    System.out.println("saurav"+amt[0]+" "+ food.getFoodCost());
-                                    return Mono.just(food);
-                                }
-                        ).subscribe();
-                    });
-                    order.setAmount(amt[0]);
-                    order.setDate(LocalDate.now().toString());
-                    return Mono.just(order);
+                order ->{
+                    Mono<List<Food>> foodList = foodService.findAllById(order.getFoodIds()).collectList();
+                    return foodList.flatMap(
+                            val -> {
+                                val.forEach(food -> { amt[0] = amt[0] +food.getFoodCost();}
+                                );
+                                order.setAmount(amt[0]);
+                                order.setDate(LocalDate.now().toString());
+                                return Mono.just(order);
+                            }
+                    );
                 }
         ).flatMap(repository::insert);
     }
