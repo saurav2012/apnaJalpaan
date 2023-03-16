@@ -14,10 +14,7 @@ import reactor.core.publisher.Mono;
 public class OrderService {
     @Autowired
     OrderRepository repository;
-    @Autowired
-    FoodService foodService;
 
-    
     public Mono<Order> saveOrder(Mono<Order> orderMono) {
         return orderMono.flatMap(repository::insert);
     }
@@ -26,9 +23,15 @@ public class OrderService {
         return repository.findById(orderId)
             .flatMap(res -> orderMono.flatMap(
                 x -> {
-                    if(x.getAmount()!=null) res.setAmount(x.getAmount());
+                    if(x.getNetAmount()!=null) res.setNetAmount(x.getNetAmount());
+                    if(x.getDiscount()!=null) res.setDiscount(x.getDiscount());
+                    if(x.getTotalAmount()!=null) res.setTotalAmount(x.getTotalAmount());
+                    if (x.getTaxOrCharges()!=null) res.setTaxOrCharges(x.getTaxOrCharges());
+                    if(x.getCouponApplied()!=null) res.setCouponApplied(x.getCouponApplied());
                     if(x.getDate()!=null) res.setDate(x.getDate());
                     if(x.getFoods()!=null) res.setFoods(x.getFoods());
+                    if (x.getTime()!=null) res.setTime(x.getTime());
+                    if (x.getDeliveryOrTakeAway()!=null) res.setDeliveryOrTakeAway(x.getDeliveryOrTakeAway());
                     return Mono.just(res);
                 }))
             .flatMap(repository::save);
@@ -41,6 +44,9 @@ public class OrderService {
     public Flux<Order> getAllOrder() {
         return repository.findAll();
     }
+//    public Flux<Order> getOrdersByUserId(String userId){
+//        return repository.fin
+//    }
 
     public Mono<Order> getOrderByOrderId(String orderId) {
         return repository.findById(orderId);

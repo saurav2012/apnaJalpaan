@@ -5,7 +5,6 @@ import com.food.apnajalpaan.repository.ReservationRepository;
 import com.food.apnajalpaan.utility.EmailHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

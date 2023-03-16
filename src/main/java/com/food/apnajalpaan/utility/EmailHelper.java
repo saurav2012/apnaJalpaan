@@ -26,29 +26,4 @@ public class EmailHelper {
         System.out.println("Mail Send...");
     }
 
-//    public void sendEmailWithAttachment(String toEmail,
-//                                        String body,
-//                                        String subject,
-//                                        String attachment) throws MessagingException {
-//
-//        MimeMessage mimeMessage = mailSender.createMimeMessage();
-//
-//        MimeMessageHelper mimeMessageHelper
-//                = new MimeMessageHelper(mimeMessage, true);
-//
-//        mimeMessageHelper.setFrom("spring.email.from@gmail.com");
-//        mimeMessageHelper.setTo(toEmail);
-//        mimeMessageHelper.setText(body);
-//        mimeMessageHelper.setSubject(subject);
-//
-//        FileSystemResource fileSystem
-//                = new FileSystemResource(new File(attachment));
-//
-//        mimeMessageHelper.addAttachment(fileSystem.getFilename(),
-//                fileSystem);
-//
-//        mailSender.send(mimeMessage);
-//        System.out.println("Mail Send...");
-//
-//    }
 }
