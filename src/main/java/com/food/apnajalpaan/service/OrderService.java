@@ -22,14 +22,21 @@ public class OrderService {
     FoodService foodService;
 
     
-    public Mono<Order> saveOrder(Mono<Order> orderMono){
+    public Mono<Order> saveOrder(Mono<Order> orderMono) {
+        return orderMono.flatMap(repository::insert);
+    }
+
+    // for amount calculated here only...
+    public Mono<Order> saveOrder1(Mono<Order> orderMono) {
         final Double[] amt = {0.0};
         return orderMono.flatMap(
-                order ->{
+                order -> {
                     Mono<List<Food>> foodList = foodService.findAllById(order.getFoodIds()).collectList();
                     return foodList.flatMap(
                             val -> {
-                                val.forEach(food -> { amt[0] = amt[0] +food.getFoodCost();}
+                                val.forEach(food -> {
+                                            amt[0] = amt[0] + food.getFoodCost();
+                                        }
                                 );
                                 order.setAmount(amt[0]);
                                 order.setDate(LocalDate.now().toString());
