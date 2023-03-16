@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -17,6 +18,6 @@ public class Order {
     private String orderId;
     private String userId;
     private Double amount = 0.0;
-    private List<String> foodIds;
+    private Map<String,Integer> foods;
     private String date;
 }
