@@ -32,6 +32,7 @@ public class OrderService {
                     if(x.getFoods()!=null) res.setFoods(x.getFoods());
                     if (x.getTime()!=null) res.setTime(x.getTime());
                     if (x.getDeliveryOrTakeAway()!=null) res.setDeliveryOrTakeAway(x.getDeliveryOrTakeAway());
+                    if(x.getIsPaid()!=null) res.setIsPaid(x.getIsPaid());
                     return Mono.just(res);
                 }))
             .flatMap(repository::save);
@@ -44,9 +45,7 @@ public class OrderService {
     public Flux<Order> getAllOrder() {
         return repository.findAll();
     }
-//    public Flux<Order> getOrdersByUserId(String userId){
-//        return repository.fin
-//    }
+
 
     public Mono<Order> getOrderByOrderId(String orderId) {
         return repository.findById(orderId);

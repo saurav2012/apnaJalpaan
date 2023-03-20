@@ -28,4 +28,5 @@ public class Order {
     private String couponApplied;
     private String time;
     private String deliveryOrTakeAway;
+    private Boolean isPaid = false;
 }

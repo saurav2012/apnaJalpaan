@@ -3,6 +3,7 @@ package com.food.apnajalpaan.model.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.food.apnajalpaan.model.Address;
 import com.food.apnajalpaan.model.Role;
+import com.food.apnajalpaan.model.Status;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.*;
 
 @Data
@@ -46,31 +48,27 @@ public class UserModel implements UserDetails {
     private Integer age;
     private String gender;
     private String birthdate;
-    private String aniversary;
+    private String anniversary;
+    private String doj = LocalDate.now().toString();
     private String profileImageId;
     private Address address;
-    private List<String> couponIds;
+    private Map<String, Status> couponIds;
     private Role role;
     private Boolean isActive;
     Collection authoritiesList;
-
     public UserModel(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
         this.authoritiesList = authorities;
     }
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authoritiesList;
     }
-
     @Override
     public String getPassword() {
         return password;
     }
-
     @Override
     public String getUsername() {
         return username;

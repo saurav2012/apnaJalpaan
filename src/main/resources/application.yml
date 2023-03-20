@@ -12,7 +12,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: apnajalpaan@gmail.com
-    password: iifsxtpsczxsycgx
+    password: jylorfchwzrbnujo
     properties:
       mail:
         smtp:
@@ -30,3 +30,8 @@ logging:
     org:
       springframework:
         security: DEBUG
+
+cron:
+  expression:
+    one-day:  '0 */1 * * * *'
+  timezone: 'PST'

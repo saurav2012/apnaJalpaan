@@ -18,7 +18,4 @@ public class Coupon {
     private String name;
     private String code;
     private String message;
-    private String expDate;
-    private Boolean isActivated;
-    private Boolean isExpired;
 }
