@@ -99,6 +99,11 @@ public class ApnaJalPaanController {
         return foodService.deleteFood(foodId);
     }
 
+    @GetMapping("/food/search/{searchQuery}")
+    public Flux<Food> searchForFood(@PathVariable String searchQuery){
+        return foodService.getDataForSearch(searchQuery);
+    }
+
 
     @PostMapping(value = "/image/save",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Mono<Image> saveImage(@RequestPart("file")Mono<FilePart> part) throws IOException {

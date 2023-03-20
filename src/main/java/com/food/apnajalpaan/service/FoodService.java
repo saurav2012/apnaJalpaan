@@ -66,4 +66,13 @@ public class FoodService {
         return repository.findAllById(ids);
     }
 
+//     search food by food name and type of food
+    public Flux<Food> getDataForSearch(String searchQuery){
+        if(searchQuery.isEmpty()){
+            return repository.findAll();
+        }else {
+            return repository.findByFoodNameContainingIgnoreCase(searchQuery);
+        }
+    }
+
 }
