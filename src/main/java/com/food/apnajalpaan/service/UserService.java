@@ -2,15 +2,12 @@ package com.food.apnajalpaan.service;
 
 import com.food.apnajalpaan.model.Status;
 import com.food.apnajalpaan.model.user.UserModel;
-import com.food.apnajalpaan.repository.CouponRepository;
 import com.food.apnajalpaan.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -18,7 +15,6 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -83,8 +79,8 @@ public class UserService {
     }
 
     @Scheduled(cron = "${cron.expression.one-day}", zone = "${cron.timezone}")
-    public Flux<Object> assignCouponIds(){
-        List<String> couponCodeList = List.of("FLAT50","FLAT20","FLAT10","UPTO20");
+    public Flux<Object> assignCouponIdsForFirstTime(){
+        List<String> couponCodeList = List.of("FLAT50","FLAT20","UPTO20");
         repository.findAll().flatMap(
             user -> {
                 if(user.getDoj().equalsIgnoreCase(LocalDate.now().toString())) {
@@ -108,7 +104,33 @@ public class UserService {
             }
         ).flatMap(repository::save).subscribe();
         return Flux.empty();
-
     }
-
+    // everymonth for new or existing user remaining coupon....
+    @Scheduled(cron = "${cron.expression.one-month}", zone = "${cron.timezone}")
+    public Flux<Object> assignCouponIdsForEveryMonthTime(){
+        List<String> couponCodeList = List.of("FLAT10","UPTO30","BUY1000GET100");
+        repository.findAll().flatMap(
+                user -> {
+                    if(user.getDoj().equalsIgnoreCase(LocalDate.now().minusDays(30).toString())) {
+                        couponCodeList.forEach(
+                                code -> {
+                                    couponService.findByCode(code).flatMap(
+                                            coupon -> {
+                                                if(!user.getCouponIds().containsKey(coupon.getCouponId())){
+                                                    user.getCouponIds().put(coupon.getCouponId(),new Status(false,false,LocalDate.now().plusDays(60).toString()));
+                                                    System.out.println("after update months");
+                                                }
+                                                System.out.println("in coupon months");
+                                                return Mono.just(coupon);
+                                            }
+                                    ).subscribe();
+                                }
+                        );
+                    }
+                    // set coupon is expired here!!
+                    return Mono.just(user);
+                }
+        ).flatMap(repository::save).subscribe();
+        return Flux.empty();
+    }
 }
