@@ -33,6 +33,6 @@ logging:
 
 cron:
   expression:
-    one-day:    '0 */1 * * * *'
-    one-month:  '0 */1 * * * *'
+    one-day:    '0 0 * * * *'
+    one-month:  '0 0 * * * *'
   timezone: 'PST'
