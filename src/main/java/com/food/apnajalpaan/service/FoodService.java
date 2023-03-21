@@ -2,7 +2,6 @@ package com.food.apnajalpaan.service;
 
 import com.food.apnajalpaan.model.Food;
 import com.food.apnajalpaan.repository.FoodRepository;
-import com.food.apnajalpaan.repository.ImageRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,12 +65,12 @@ public class FoodService {
         return repository.findAllById(ids);
     }
 
-//     search food by food name and type of food
+    // search food by food name and type of food
     public Flux<Food> getDataForSearch(String searchQuery){
         if(searchQuery.isEmpty()){
             return repository.findAll();
         }else {
-            return repository.findByFoodNameContainingIgnoreCase(searchQuery);
+            return repository.findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCase(searchQuery,searchQuery);
         }
     }
 
