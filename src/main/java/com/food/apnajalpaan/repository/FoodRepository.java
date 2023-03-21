@@ -9,5 +9,7 @@ import reactor.core.publisher.Flux;
 public interface FoodRepository extends ReactiveMongoRepository<Food,String> {
     Flux<Food> findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCase(String FoodName,String Type);
 
-    Flux<Food> findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCaseAndCategory(String searchQuery, String searchQuery1, String category);
+    Flux<Food> findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCaseAndCategory(String FoodName, String Type, String category);
+
+    Flux<Food> findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCaseAndRating(String FoodName, String Type, Double rating);
 }

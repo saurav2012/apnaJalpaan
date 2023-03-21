@@ -74,7 +74,19 @@ public class FoodService {
         }
     }
 
-    public Flux<Food> getDataForSearchWithFilter(String searchQuery, String category) {
-        return repository.findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCaseAndCategory(searchQuery,searchQuery,category);
+    public Flux<Food> getDataForSearchWithFilterCategory(String searchQuery, String category) {
+        if(searchQuery.isEmpty()){
+            return repository.findAll();
+        }else {
+            return repository.findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCaseAndCategory(searchQuery, searchQuery, category);
+        }
+    }
+
+    public Flux<Food> getDataForSearchWithFilterRating(String searchQuery, Double rating) {
+        if(searchQuery.isEmpty()){
+            return repository.findAll();
+        }else {
+            return repository.findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCaseAndRating(searchQuery, searchQuery, rating);
+        }
     }
 }
