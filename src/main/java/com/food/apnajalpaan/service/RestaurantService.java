@@ -1,6 +1,7 @@
 package com.food.apnajalpaan.service;
 
 import com.food.apnajalpaan.model.Restaurant;
+import com.food.apnajalpaan.model.Review;
 import com.food.apnajalpaan.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,17 @@ public class RestaurantService {
 
     public Mono<Restaurant> getRestaurantByRestaurantId(String restaurantId) {
         return repository.findById(restaurantId);
+    }
+    public Mono<Restaurant> addReview(String id,Mono<Review> reviewMono){
+        return repository.findById(id).flatMap(
+            res -> {
+                return reviewMono.flatMap(
+                    review -> {
+                        res.getReview().put(review.getUserId(),review.getComment());
+                        return Mono.just(res);
+                    }
+                );
+            }
+        ).flatMap(repository::save);
     }
 }

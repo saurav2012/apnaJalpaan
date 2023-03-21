@@ -112,7 +112,7 @@ public class ApnaJalPaanController {
         return foodService.getDataForSearchWithFilterRating(searchQuery,rating);
     }
     @PostMapping("/food/rating/{foodId}")
-    public Mono<Food> addRating(@RequestBody UserRating userRating,@PathVariable String foodId){
+    public Mono<Food> addRating(@RequestBody Mono<UserRating> userRating,@PathVariable String foodId){
         return foodService.addingUserRating(foodId,userRating);
     }
 
@@ -257,7 +257,8 @@ public class ApnaJalPaanController {
     {
         return restaurantService.updateRestaurant(restaurantId,restaurantModelMono);
     }
-
-
-
+    @PostMapping("/restaurant/review/{restaurantId}")
+    public Mono<Restaurant> addReview(@RequestBody Mono<Review> reviewMono,@PathVariable String restaurantId){
+        return restaurantService.addReview(restaurantId,reviewMono);
+    }
 }

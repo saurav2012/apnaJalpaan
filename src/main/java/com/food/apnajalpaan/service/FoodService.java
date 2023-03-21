@@ -92,17 +92,20 @@ public class FoodService {
     }
 
     // adding userRating... and avg rating to rating
-    public Mono<Food> addingUserRating(String foodId,UserRating userRating){
+    public Mono<Food> addingUserRating(String foodId,Mono<UserRating> userRating){
         return repository.findById(foodId)
-                .flatMap(res -> {
-                    res.getUserRating().put(userRating.getUserId(),userRating.getRating());
-//                    res.setRating(res.getUserRating().values().stream().mapToDouble(Double::doubleValue).average().orElse(0));
-                    return Mono.just(res);
-                })
-                .flatMap(repository::save).flatMap(res -> {
-                    res.setRating(res.getUserRating().values().stream().mapToDouble(Double::doubleValue).average().orElse(0));
-                    return Mono.just(res);
-                }).flatMap(repository::save);
+            .flatMap(res -> {
+                return userRating.flatMap(
+                    rating -> {
+                        res.getUserRating().put(rating.getUserId(),rating.getRating());
+                        return Mono.just(res);
+                    }
+                );
+            })
+            .flatMap(repository::save).flatMap(res -> {
+                res.setRating(res.getUserRating().values().stream().mapToDouble(Double::doubleValue).average().orElse(0));
+                return Mono.just(res);
+            }).flatMap(repository::save);
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalTime;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -23,4 +24,5 @@ public class Restaurant {
     private String location;
     private String email;
     private Long contact;
+    private Map<String,String> review;
 }
