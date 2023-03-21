@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Map;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +20,7 @@ public class Food {
     private String category;
     private String type;
     private Double rating;
+    private Map<String,Double> userRating;
     private Boolean isAvailable;
     private String imageId;
 }

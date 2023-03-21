@@ -1,6 +1,7 @@
 package com.food.apnajalpaan.service;
 
 import com.food.apnajalpaan.model.Food;
+import com.food.apnajalpaan.model.UserRating;
 import com.food.apnajalpaan.repository.FoodRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,4 +90,19 @@ public class FoodService {
             return repository.findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCaseAndRating(searchQuery, searchQuery, rating);
         }
     }
+
+    // adding userRating... and avg rating to rating
+    public Mono<Food> addingUserRating(String foodId,UserRating userRating){
+        return repository.findById(foodId)
+                .flatMap(res -> {
+                    res.getUserRating().put(userRating.getUserId(),userRating.getRating());
+//                    res.setRating(res.getUserRating().values().stream().mapToDouble(Double::doubleValue).average().orElse(0));
+                    return Mono.just(res);
+                })
+                .flatMap(repository::save).flatMap(res -> {
+                    res.setRating(res.getUserRating().values().stream().mapToDouble(Double::doubleValue).average().orElse(0));
+                    return Mono.just(res);
+                }).flatMap(repository::save);
+    }
+
 }

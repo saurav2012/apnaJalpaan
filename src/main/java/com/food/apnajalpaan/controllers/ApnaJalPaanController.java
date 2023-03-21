@@ -111,6 +111,10 @@ public class ApnaJalPaanController {
     public Flux<Food> searchForFoodFilterRating(@PathVariable String searchQuery,@PathVariable Double rating){
         return foodService.getDataForSearchWithFilterRating(searchQuery,rating);
     }
+    @PostMapping("/food/rating/{foodId}")
+    public Mono<Food> addRating(@RequestBody UserRating userRating,@PathVariable String foodId){
+        return foodService.addingUserRating(foodId,userRating);
+    }
 
 
     @PostMapping(value = "/image/save",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
