@@ -23,7 +23,6 @@ public class ApnajalpaanApplication {
 		return Executors.newScheduledThreadPool(15);
 	}
 	public static void main(String[] args) {
-//		System.out.println(LocalDate.now().minusDays(1));
 		SpringApplication.run(ApnajalpaanApplication.class, args);
 	}
 

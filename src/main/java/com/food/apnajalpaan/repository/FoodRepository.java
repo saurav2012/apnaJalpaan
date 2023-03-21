@@ -8,4 +8,6 @@ import reactor.core.publisher.Flux;
 @Repository
 public interface FoodRepository extends ReactiveMongoRepository<Food,String> {
     Flux<Food> findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCase(String FoodName,String Type);
+
+    Flux<Food> findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCaseAndCategory(String searchQuery, String searchQuery1, String category);
 }

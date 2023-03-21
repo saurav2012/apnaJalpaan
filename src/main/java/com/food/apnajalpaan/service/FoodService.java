@@ -74,4 +74,7 @@ public class FoodService {
         }
     }
 
+    public Flux<Food> getDataForSearchWithFilter(String searchQuery, String category) {
+        return repository.findDistinctFoodByFoodNameContainingIgnoreCaseOrTypeContainingIgnoreCaseAndCategory(searchQuery,searchQuery,category);
+    }
 }
