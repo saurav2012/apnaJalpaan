@@ -3,7 +3,11 @@ package com.food.apnajalpaan.controllers;
 import com.food.apnajalpaan.model.*;
 import com.food.apnajalpaan.model.user.UserModel;
 import com.food.apnajalpaan.service.*;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.multipart.FilePart;
@@ -14,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.io.*;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -33,6 +38,9 @@ public class ApnaJalPaanController {
     CouponService couponService;
     @Autowired
     RestaurantService restaurantService;
+
+    @Autowired
+    PaymentService paymentService;
 
     // user endpoints
     @GetMapping("/user")
@@ -260,5 +268,15 @@ public class ApnaJalPaanController {
     @PostMapping("/restaurant/review/{restaurantId}")
     public Mono<Restaurant> addReview(@RequestBody Mono<Review> reviewMono,@PathVariable String restaurantId){
         return restaurantService.addReview(restaurantId,reviewMono);
+    }
+
+    @PostMapping("/food/order/{userId}/{amount}")
+    public Mono<Payment> createOrder(@PathVariable Double amount,@PathVariable String userId) throws RazorpayException {
+        return paymentService.createOrder(amount,userId);
+    }
+
+    @PostMapping("/food/update/order")
+    public Mono<Payment> updateOrder(@RequestBody Mono<Payment> paymentMono){
+        return paymentService.updateOrder(paymentMono);
     }
 }

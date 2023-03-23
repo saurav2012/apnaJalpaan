@@ -47,8 +47,8 @@ public class RestaurantService {
     public Mono<Restaurant> getRestaurantByRestaurantId(String restaurantId) {
         return repository.findById(restaurantId);
     }
-    public Mono<Restaurant> addReview(String id,Mono<Review> reviewMono){
-        return repository.findById(id).flatMap(
+    public Mono<Restaurant> addReview(String restaurantId,Mono<Review> reviewMono){
+        return repository.findById(restaurantId).flatMap(
             res -> {
                 return reviewMono.flatMap(
                     review -> {

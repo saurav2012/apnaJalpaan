@@ -3,6 +3,7 @@ package com.food.apnajalpaan.service;
 import com.food.apnajalpaan.model.Status;
 import com.food.apnajalpaan.model.user.UserModel;
 import com.food.apnajalpaan.repository.UserRepository;
+import com.food.apnajalpaan.utility.EmailHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,7 +23,22 @@ public class UserService {
 
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private EmailHelper emailHelper;
 
+    static final String EMAIL_BODY_USER_WELCOME = "Greetings,#FIRSTNAME#\n" +
+            " Welcome to ApnaJalPaan family!!\n" +
+            "Thankyou for choosing us, we are happy to serve you.\n" +
+            "Some vouchers have been added to your account, enjoy delicious and healthy food with us!\n" +
+            "For more details visit: #WEBSITELINK# \n \n" +
+            "Regards\n" +
+            "ApnaJalPaan Restaurant: #ADDRESS#";
+    static final String websiteLink = "http://www.apnajalpaan.com";
+    static final String FIRST_NAME = "#FIRSTNAME#";
+    static final String ADDRESS = "#ADDRESS#";
+    public final String locationlink = "https://www.google.com/maps/place/Barbeque+Nation/@28.6294697,77.0695303,16z/data=!3m1!5s0x390d04c118c5eb15:0xe80248a5f2cad368!4m10!1m2!2m1!1sbbq+janakpuri!3m6!1s0x390d04afaaaaaaab:0x9f4338b72d5b02c8!8m2!3d28.6288372!4d77.0766715!15sCg1iYnEgamFuYWtwdXJpWg8iDWJicSBqYW5ha3B1cmmSARFidWZmZXRfcmVzdGF1cmFudOABAA!16s%2Fg%2F1tdqy2z2";
+    static final String WEBSITE_LINK = "#WEBSITELINK#";
+    static final Integer daysOfExp = 60;
     @Lazy
     @Autowired
     CouponService couponService;
@@ -35,7 +51,13 @@ public class UserService {
                     res.setDoj(LocalDate.now().toString());
                     return Mono.just(res);
                 }
-        ).flatMap(repository::insert);
+        ).flatMap(repository::insert).flatMap(user -> {
+            String body = EMAIL_BODY_USER_WELCOME.replace(FIRST_NAME,user.getFirstName())
+                    .replace(WEBSITE_LINK,websiteLink)
+                    .replace(ADDRESS,locationlink);
+            emailHelper.sendSimpleEmail(user.getEmail(), body,"Welcome to ApnaJalPaan Family!");
+            return Mono.just(user);
+        });
     }
 
     public Mono<UserModel> updateUser(String userId, Mono<UserModel> userModelMono){
@@ -89,7 +111,7 @@ public class UserService {
                             couponService.findByCode(code).flatMap(
                                 coupon -> {
                                     if(!user.getCouponIds().containsKey(coupon.getCouponId())){
-                                        user.getCouponIds().put(coupon.getCouponId(),new Status(false,false,LocalDate.now().plusDays(60).toString()));
+                                        user.getCouponIds().put(coupon.getCouponId(),new Status(false,false,LocalDate.now().plusDays(daysOfExp).toString()));
                                         System.out.println("after update");
                                     }
                                     System.out.println("in coupon");
@@ -100,6 +122,9 @@ public class UserService {
                     );
                 }
                 // set coupon is expired here!!
+                user.getCouponIds().values().forEach(id -> {
+                    id.setExpDate(LocalDate.now().plusDays(daysOfExp).toString());
+                });
                 return Mono.just(user);
             }
         ).flatMap(repository::save).subscribe();
