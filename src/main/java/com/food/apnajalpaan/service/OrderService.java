@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
+import java.util.List;
 @Service
 @Slf4j
 public class OrderService {
@@ -33,6 +33,7 @@ public class OrderService {
                     if (x.getTime()!=null) res.setTime(x.getTime());
                     if (x.getDeliveryOrTakeAway()!=null) res.setDeliveryOrTakeAway(x.getDeliveryOrTakeAway());
                     if(x.getIsPaid()!=null) res.setIsPaid(x.getIsPaid());
+                    if(x.getIsDelivered()!=null) res.setIsDelivered(x.getIsDelivered());
                     return Mono.just(res);
                 }))
             .flatMap(repository::save);
@@ -50,4 +51,9 @@ public class OrderService {
     public Mono<Order> getOrderByOrderId(String orderId) {
         return repository.findById(orderId);
     }
+
+    public Flux<Order> getAllByOrderId(List<String> orderIdList){
+        return repository.findAllById(orderIdList);
+    }
+
 }

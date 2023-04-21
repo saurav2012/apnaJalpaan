@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.io.*;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -38,9 +39,10 @@ public class ApnaJalPaanController {
     CouponService couponService;
     @Autowired
     RestaurantService restaurantService;
-
     @Autowired
     PaymentService paymentService;
+    @Autowired
+    CartService cartService;
 
     // user endpoints
     @GetMapping("/user")
@@ -59,7 +61,7 @@ public class ApnaJalPaanController {
     public Mono<UserModel> getUserByUserId(@PathVariable String userId){
         return userService.getUserByUserId(userId);
     }
-    @GetMapping("/user/{username}")
+    @GetMapping("/user/username/{username}")
     public Mono<UserModel> getUserByUsername(@PathVariable String username){
         return userService.getUserByUsername(username);
     }
@@ -202,6 +204,10 @@ public class ApnaJalPaanController {
     public Mono<Order> getOrderByOrderId(@PathVariable String orderId){
         return orderService.getOrderByOrderId(orderId);
     }
+//    @GetMapping("/order/foods/{orderId}")
+//    public Flux<Food> getAllFoodByOrderId(@PathVariable String orderId){
+//        return orderService.getAllFoodByOrderId(orderId);
+//    }
 
     @DeleteMapping("/order/delete/{orderId}")
     public Mono<Void> deleteOrder(@PathVariable String orderId){
@@ -278,5 +284,27 @@ public class ApnaJalPaanController {
     @PostMapping("/food/update/order")
     public Mono<Payment> updateOrder(@RequestBody Mono<Payment> paymentMono){
         return paymentService.updateOrder(paymentMono);
+    }
+    // cart Endpoints
+    @PostMapping("/cart/save")
+    public Mono<CartItem> addToCart(@RequestBody Mono<CartItem> cartMono){
+        return cartService.addToCart(cartMono);
+    }
+    @GetMapping("/cart")
+    public Flux<CartItem> getAllCartItems(){
+        return cartService.getAllCartItem();
+    }
+    @GetMapping("/cart/userId/{userId}")
+    public Flux<CartItem> getAllCartItemByUserId(@PathVariable String userId){
+        return cartService.getAllByUserId(userId);
+    }
+
+    @DeleteMapping("/cart/delete/{cartId}")
+    public Mono<Void> deleteByCartId(@PathVariable String cartId){
+        return cartService.deleteByCartId(cartId);
+    }
+    @DeleteMapping("/cart/delete/userId/{userId}")
+    public Mono<Void> deleteByUserId(@PathVariable String userId){
+        return cartService.deleteAllByUserId(userId);
     }
 }

@@ -23,4 +23,6 @@ public class Food {
     private Map<String,Double> userRating;
     private Boolean isAvailable;
     private String imageId;
+    private String imageUrl;
+    private String description;
 }

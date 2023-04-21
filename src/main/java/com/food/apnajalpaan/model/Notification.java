@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Notification {
     @Id
     private String notificationId;
+    private String userId;
     private String message;
     private Boolean isSeen;
 }

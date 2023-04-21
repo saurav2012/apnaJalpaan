@@ -6,6 +6,7 @@ import com.food.apnajalpaan.utility.EmailHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -46,12 +47,14 @@ public class ReservationService {
     UserService userService;
     public Mono<Reservation> saveReservation(Mono<Reservation> reservationMono){
         // exception handling left...
+        System.out.println("in save reservation");
         return reservationMono.flatMap(
                 reservation -> {
                     return userService.getUserByUsername(reservation.getUsername()).flatMap(
                             user -> {
                                 String body = EMAIL_BODY_ADMIN.replace(USERNAME_STR, user.getUsername()).replace(APPROVE_STR,apporveLink).replace(DENIED_STR,deniedLink);
                                 emailHelper.sendSimpleEmail(ADMIN_EMAIL,body,"New Reservation from "+user.getFirstName());
+                                System.out.println("Hii");
                                 return Mono.just(reservation);
                             }
                     );

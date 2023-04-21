@@ -94,4 +94,7 @@ public class ImageService {
     public Mono<Image> getByName(String name){
         return repository.findByName(name);
     }
+    public Mono<Image> getByImageId(String imageId){
+        return repository.findById(imageId);
+    }
 }

@@ -7,7 +7,6 @@ import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -28,5 +27,6 @@ public class Order {
     private String couponApplied;
     private String time;
     private String deliveryOrTakeAway;
+    private String isDelivered;
     private Boolean isPaid = false;
 }

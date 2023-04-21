@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,6 +27,7 @@ public class FoodService {
                     return imageService.getByName(res.getFoodName()).flatMap(
                             val -> {
                                 res.setImageId(val.getImageId());
+                                res.setImageUrl(val.getUrl());
                                 return Mono.just(res);
                             }
                     );
@@ -45,6 +47,7 @@ public class FoodService {
                                 if(x.getRating()!=null) res.setRating(x.getRating());
                                 if(x.getIsAvailable()!=null) res.setIsAvailable(x.getIsAvailable());
                                 if(x.getCategory()!=null) res.setCategory(x.getCategory());
+                                if(x.getDescription()!=null) res.setDescription(x.getDescription());
                                 return Mono.just(res);
                             });
                 })
@@ -106,6 +109,10 @@ public class FoodService {
                 res.setRating(res.getUserRating().values().stream().mapToDouble(Double::doubleValue).average().orElse(0));
                 return Mono.just(res);
             }).flatMap(repository::save);
+    }
+
+    public Flux<Food> getAllByIds(List<String> foodIds){
+        return repository.findAllById(foodIds);
     }
 
 }

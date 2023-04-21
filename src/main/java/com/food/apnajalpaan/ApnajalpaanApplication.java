@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.time.LocalDate;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -24,6 +23,8 @@ public class ApnajalpaanApplication {
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(ApnajalpaanApplication.class, args);
+		String s = "saura";
+		System.out.println(new RuntimeException());
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.food.apnajalpaan.service;
 
+import com.food.apnajalpaan.model.Order;
 import com.food.apnajalpaan.model.Status;
 import com.food.apnajalpaan.model.user.UserModel;
 import com.food.apnajalpaan.repository.UserRepository;
@@ -25,6 +26,8 @@ public class UserService {
     private UserRepository repository;
     @Autowired
     private EmailHelper emailHelper;
+    @Autowired
+    private OrderService orderService;
 
     static final String EMAIL_BODY_USER_WELCOME = "Greetings,#FIRSTNAME#\n" +
             " Welcome to ApnaJalPaan family!!\n" +
@@ -153,9 +156,21 @@ public class UserService {
                         );
                     }
                     // set coupon is expired here!!
+                    user.getCouponIds().values().forEach(id -> {
+                        id.setExpDate(LocalDate.now().plusDays(daysOfExp).toString());
+                    });
                     return Mono.just(user);
                 }
         ).flatMap(repository::save).subscribe();
         return Flux.empty();
     }
+
+//    public Flux<Order> getAllOrder(String userId){
+//        List<String> orderIdList;
+//        return repository.findById(userId).flatMap(
+//                user -> {
+//                    orderIdList.add(user.getCouponIds());
+//                }
+//        )
+//    }
 }
