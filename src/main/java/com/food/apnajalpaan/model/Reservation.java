@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -26,4 +27,5 @@ public class Reservation {
     @NotEmpty(message = "Select time")
     private String time;
     private Boolean isConfirmed = false;
+    private Boolean isExpired = false;
 }

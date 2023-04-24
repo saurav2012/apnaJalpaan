@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Document(collection = "cart_item")
 public class CartItem {
     @Id
-    private String cardId;
+    private String cartId;
     @NotEmpty
     private String userId;
     private Food food;

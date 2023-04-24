@@ -286,9 +286,9 @@ public class ApnaJalPaanController {
         return paymentService.updateOrder(paymentMono);
     }
     // cart Endpoints
-    @PostMapping("/cart/save")
-    public Mono<CartItem> addToCart(@RequestBody Mono<CartItem> cartMono){
-        return cartService.addToCart(cartMono);
+    @PostMapping("/cart/save/{userId}")
+    public Mono<CartItem> addToCart(@RequestBody Mono<CartItem> cartMono,@PathVariable String userId){
+        return cartService.addToCart(cartMono,userId);
     }
     @GetMapping("/cart")
     public Flux<CartItem> getAllCartItems(){
@@ -306,5 +306,9 @@ public class ApnaJalPaanController {
     @DeleteMapping("/cart/delete/userId/{userId}")
     public Mono<Void> deleteByUserId(@PathVariable String userId){
         return cartService.deleteAllByUserId(userId);
+    }
+    @PostMapping("/cart/update/{cartId}")
+    public Mono<CartItem> updateCart(@PathVariable String cartId,@RequestBody Mono<CartItem> cartItemMono){
+        return cartService.updateCart(cartId,cartItemMono);
     }
 }

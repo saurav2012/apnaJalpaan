@@ -135,17 +135,17 @@ public class UserService {
     }
     // everymonth for new or existing user remaining coupon....
     @Scheduled(cron = "${cron.expression.one-month}", zone = "${cron.timezone}")
-    public Flux<Object> assignCouponIdsForEveryMonthTime(){
-        List<String> couponCodeList = List.of("FLAT10","UPTO30","BUY1000GET100");
+    public Flux<Object> assignCouponIdsForEveryMonthTime() {
+        List<String> couponCodeList = List.of("FLAT10", "UPTO30", "BUY1000GET100");
         repository.findAll().flatMap(
                 user -> {
-                    if(user.getDoj().equalsIgnoreCase(LocalDate.now().minusDays(30).toString())) {
+                    if (user.getDoj().equalsIgnoreCase(LocalDate.now().minusDays(30).toString())) {
                         couponCodeList.forEach(
                                 code -> {
                                     couponService.findByCode(code).flatMap(
                                             coupon -> {
-                                                if(!user.getCouponIds().containsKey(coupon.getCouponId())){
-                                                    user.getCouponIds().put(coupon.getCouponId(),new Status(false,false,LocalDate.now().plusDays(60).toString()));
+                                                if (!user.getCouponIds().containsKey(coupon.getCouponId())) {
+                                                    user.getCouponIds().put(coupon.getCouponId(), new Status(false, false, LocalDate.now().plusDays(60).toString()));
                                                     System.out.println("after update months");
                                                 }
                                                 System.out.println("in coupon months");
@@ -164,13 +164,4 @@ public class UserService {
         ).flatMap(repository::save).subscribe();
         return Flux.empty();
     }
-
-//    public Flux<Order> getAllOrder(String userId){
-//        List<String> orderIdList;
-//        return repository.findById(userId).flatMap(
-//                user -> {
-//                    orderIdList.add(user.getCouponIds());
-//                }
-//        )
-//    }
 }

@@ -16,7 +16,6 @@ public class EmailHelper {
                                 String body,
                                 String subject) {
         SimpleMailMessage message = new SimpleMailMessage();
-
         message.setFrom(email);
         message.setTo(toEmail);
         message.setText(body);
