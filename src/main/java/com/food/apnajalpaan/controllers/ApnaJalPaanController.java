@@ -137,6 +137,10 @@ public class ApnaJalPaanController {
             }
         });
     }
+    @GetMapping("/image/name/{name}")
+    public Mono<Image> getImageByName(@PathVariable String name){
+        return imageService.getByName(name);
+    }
 
     @GetMapping("/image/{imageId}")
     public Mono<Image> getImageByImageId(@PathVariable String imageId){
@@ -189,6 +193,14 @@ public class ApnaJalPaanController {
     public Mono<Reservation> denyReservation(@RequestBody Mono<Reservation> reservationMono,@PathVariable String reservationId){
         return reservationService.denyReservationByAdmin(reservationId,reservationMono);
     }
+    @GetMapping("/reservation/expired")
+    public Flux<Reservation> getExpiredReservationData(){
+        return reservationService.getAllExpiredReservation();
+    }
+    @GetMapping("/reservation/active")
+    public Flux<Reservation> getActiveReservationData(){
+        return reservationService.getAllActiveReservation();
+    }
 
     // endpoint for order
     @PostMapping("/order/save")
@@ -204,10 +216,6 @@ public class ApnaJalPaanController {
     public Mono<Order> getOrderByOrderId(@PathVariable String orderId){
         return orderService.getOrderByOrderId(orderId);
     }
-//    @GetMapping("/order/foods/{orderId}")
-//    public Flux<Food> getAllFoodByOrderId(@PathVariable String orderId){
-//        return orderService.getAllFoodByOrderId(orderId);
-//    }
 
     @DeleteMapping("/order/delete/{orderId}")
     public Mono<Void> deleteOrder(@PathVariable String orderId){

@@ -48,6 +48,9 @@ public class ReservationService {
     @Autowired
     UserService userService;
     public Mono<Reservation> saveReservation(Mono<Reservation> reservationMono){
+        return reservationMono.flatMap(repository::insert);
+    }
+    public Mono<Reservation> saveReservationWithNotification(Mono<Reservation> reservationMono){
         // exception handling left...
         System.out.println("in save reservation");
         return reservationMono.flatMap(
@@ -86,6 +89,24 @@ public class ReservationService {
 
     public Flux<Reservation> getAllReservation() {
         return repository.findAll();
+    }
+    public Flux<Reservation> getAllExpiredReservation(){
+        return repository.findAll().flatMap(
+                reservation -> {
+                    if(reservation.getIsExpired()) {
+                        return Mono.just(reservation);
+                    }else return Mono.empty();
+                }
+        );
+    }
+    public Flux<Reservation> getAllActiveReservation(){
+        return repository.findAll().flatMap(
+                reservation -> {
+                    if(!reservation.getIsExpired()) {
+                        return Mono.just(reservation);
+                    }else return Mono.empty();
+                }
+        );
     }
     public Mono<Reservation> getReservationByReservationId(String reservationId) {
         return repository.findById(reservationId);

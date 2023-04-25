@@ -54,6 +54,17 @@ public class UserService {
                     res.setDoj(LocalDate.now().toString());
                     return Mono.just(res);
                 }
+        ).flatMap(repository::insert);
+    }
+
+    // with mail as notification...
+    public Mono<UserModel> saveUserWithNotification(Mono<UserModel> userModelMono){
+        return userModelMono.flatMap(
+                res -> {
+                    res.setPassword(passwordEncoder.encode(res.getPassword()));
+                    res.setDoj(LocalDate.now().toString());
+                    return Mono.just(res);
+                }
         ).flatMap(repository::insert).flatMap(user -> {
             String body = EMAIL_BODY_USER_WELCOME.replace(FIRST_NAME,user.getFirstName())
                     .replace(WEBSITE_LINK,websiteLink)
