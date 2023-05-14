@@ -23,8 +23,6 @@ public class ApnajalpaanApplication {
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(ApnajalpaanApplication.class, args);
-		String s = "saura";
-		System.out.println(new RuntimeException());
 	}
 
 }

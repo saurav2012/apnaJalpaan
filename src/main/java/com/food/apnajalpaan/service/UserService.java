@@ -1,6 +1,7 @@
 package com.food.apnajalpaan.service;
 
 import com.food.apnajalpaan.model.Order;
+import com.food.apnajalpaan.model.Role;
 import com.food.apnajalpaan.model.Status;
 import com.food.apnajalpaan.model.user.UserModel;
 import com.food.apnajalpaan.repository.UserRepository;
@@ -52,6 +53,8 @@ public class UserService {
                 res -> {
                     res.setPassword(passwordEncoder.encode(res.getPassword()));
                     res.setDoj(LocalDate.now().toString());
+                    res.setIsActive(true);
+                    res.setRole(Role.ROLE_USER);
                     return Mono.just(res);
                 }
         ).flatMap(repository::insert);
