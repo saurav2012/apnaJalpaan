@@ -1,11 +1,7 @@
 spring:
   data:
     mongodb:
-      database: ${PROD_DB_NAME}
-      host: ${MONGOHOST}
-      port: ${MONGOPORT}
-      username: ${MONGOUSER}
-      password: ${MONGOPASSWORD}
+      uri: ${MONGO_URL}
   servlet:
     multipart:
       max-file-size: 20MB
