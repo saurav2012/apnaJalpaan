@@ -2,6 +2,7 @@ package com.food.apnajalpaan.controllers;
 
 import com.food.apnajalpaan.model.user.AuthenticationRequest;
 import com.food.apnajalpaan.security.JwtTokenProvider;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
