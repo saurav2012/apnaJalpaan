@@ -22,6 +22,7 @@ public class ApnajalpaanApplication {
 		return Executors.newScheduledThreadPool(15);
 	}
 	public static void main(String[] args) {
+		System.out.println("saurav");
 		SpringApplication.run(ApnajalpaanApplication.class, args);
 	}
 
