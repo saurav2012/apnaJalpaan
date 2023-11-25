@@ -49,14 +49,6 @@ public class UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
     public Mono<Object> saveUser(Mono<UserModel> userModelMono){
-//        return userModelMono.flatMap(res -> {
-//                res.setPassword(passwordEncoder.encode(res.getPassword()));
-//                res.setDoj(LocalDate.now().toString());
-//                res.setIsActive(true);
-//                res.setRole(Role.ROLE_USER);
-//                return Mono.just(res);
-//            }
-//        ).flatMap(repository::insert);
         return userModelMono
                 .flatMap(userModel ->
                         repository.findByUsername(userModel.getUsername())

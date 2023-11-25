@@ -94,7 +94,7 @@ public class ApnaJalPaanController {
     }
 
     @PostMapping("/food/save")
-    public Mono<Food> saveFood(@RequestBody Mono<Food> foodMono){
+    public Mono<Food> saveFood(@Valid @RequestBody Mono<Food> foodMono){
         return foodService.saveFood(foodMono);
     }
 
@@ -128,7 +128,7 @@ public class ApnaJalPaanController {
 
 
     @PostMapping(value = "/image/save",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Mono<Image> saveImage(@RequestPart("file")Mono<FilePart> part) throws IOException {
+    public Mono<Image> saveImage( @RequestPart("file")Mono<FilePart> part) throws IOException {
         return part.flatMap(file -> {
             try {
                 return imageService.saveImage(file);
@@ -160,7 +160,7 @@ public class ApnaJalPaanController {
 
     //Reservation endpoints
     @PostMapping("/reservation/save")
-    public Mono<Reservation> saveReservation(@RequestBody Mono<Reservation> reservationMono){
+    public Mono<Reservation> saveReservation(@Valid @RequestBody Mono<Reservation> reservationMono){
         return reservationService.saveReservation(reservationMono);
     }
     @GetMapping("/reservation")
@@ -204,7 +204,7 @@ public class ApnaJalPaanController {
 
     // endpoint for order
     @PostMapping("/order/save")
-    public Mono<Order> saveOrder(@RequestBody Mono<Order> orderModelMono){
+    public Mono<Order> saveOrder(@Valid @RequestBody Mono<Order> orderModelMono){
         return orderService.saveOrder(orderModelMono);
     }
     @GetMapping("/order")
@@ -230,7 +230,7 @@ public class ApnaJalPaanController {
 
     //end point for coupon
     @PostMapping("/coupon/save")
-    public Mono<Coupon> saveCoupon(@RequestBody Mono<Coupon> couponModelMono){
+    public Mono<Coupon> saveCoupon(@Valid @RequestBody Mono<Coupon> couponModelMono){
         return couponService.saveCoupon(couponModelMono);
     }
     @GetMapping("/coupon")
@@ -249,14 +249,14 @@ public class ApnaJalPaanController {
     }
 
     @PutMapping("/coupon/update/{couponId}")
-    public Mono<Coupon> updateCoupon(@RequestBody Mono<Coupon> couponModelMono, @PathVariable String couponId)
+    public Mono<Coupon> updateCoupon(@Valid @RequestBody Mono<Coupon> couponModelMono, @PathVariable String couponId)
     {
         return couponService.updateCoupon(couponId,couponModelMono);
     }
 
     // endpoint for restaurant
     @PostMapping("/restaurant/save")
-    public Mono<Restaurant> saveRestaurant(@RequestBody Mono<Restaurant> restaurantModelMono){
+    public Mono<Restaurant> saveRestaurant(@Valid @RequestBody Mono<Restaurant> restaurantModelMono){
         return restaurantService.saveRestaurant(restaurantModelMono);
     }
     @GetMapping("/restaurant")
@@ -295,7 +295,7 @@ public class ApnaJalPaanController {
     }
     // cart Endpoints
     @PostMapping("/cart/save/{userId}")
-    public Mono<CartItem> addToCart(@RequestBody Mono<CartItem> cartMono,@PathVariable String userId){
+    public Mono<CartItem> addToCart( @RequestBody Mono<CartItem> cartMono,@PathVariable String userId){
         return cartService.addToCart(cartMono,userId);
     }
     @GetMapping("/cart")
