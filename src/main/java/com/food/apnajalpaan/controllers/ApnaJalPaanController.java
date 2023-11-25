@@ -67,7 +67,7 @@ public class ApnaJalPaanController {
     }
 
     @PostMapping("/user/save")
-    public Mono<UserModel> saveUser(@Valid @RequestBody Mono<UserModel> userModelRequest) {
+    public Mono<Object> saveUser(@Valid @RequestBody Mono<UserModel> userModelRequest) {
         return userService.saveUser(userModelRequest);
     }
 

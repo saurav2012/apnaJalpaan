@@ -48,16 +48,31 @@ public class UserService {
     CouponService couponService;
     @Autowired
     PasswordEncoder passwordEncoder;
-    public Mono<UserModel> saveUser(Mono<UserModel> userModelMono){
-        return userModelMono.flatMap(
-                res -> {
-                    res.setPassword(passwordEncoder.encode(res.getPassword()));
-                    res.setDoj(LocalDate.now().toString());
-                    res.setIsActive(true);
-                    res.setRole(Role.ROLE_USER);
-                    return Mono.just(res);
-                }
-        ).flatMap(repository::insert);
+    public Mono<Object> saveUser(Mono<UserModel> userModelMono){
+//        return userModelMono.flatMap(res -> {
+//                res.setPassword(passwordEncoder.encode(res.getPassword()));
+//                res.setDoj(LocalDate.now().toString());
+//                res.setIsActive(true);
+//                res.setRole(Role.ROLE_USER);
+//                return Mono.just(res);
+//            }
+//        ).flatMap(repository::insert);
+        return userModelMono
+                .flatMap(userModel ->
+                        repository.findByUsername(userModel.getUsername())
+                                .flatMap(existingUser -> {
+                                    // User with the same username or email already exists, handle accordingly
+                                    return Mono.error(new RuntimeException("User with the same username or email already exists"));
+                                })
+                                .switchIfEmpty(Mono.defer(() -> {
+                                    // No existing user found, proceed with saving the new user
+                                    userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+                                    userModel.setDoj(LocalDate.now().toString());
+                                    userModel.setIsActive(true);
+                                    userModel.setRole(Role.ROLE_USER);
+                                    return repository.insert(userModel);
+                                }))
+                );
     }
 
     // with mail as notification...
