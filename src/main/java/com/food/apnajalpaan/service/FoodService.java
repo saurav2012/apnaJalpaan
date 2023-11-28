@@ -22,17 +22,7 @@ public class FoodService {
     ImageService imageService;
 
     public Mono<Food> saveFood(Mono<Food> foodMono){
-        return foodMono.flatMap(
-                res -> {
-                    return imageService.getByName(res.getFoodName()).flatMap(
-                            val -> {
-                                res.setImageId(val.getImageId());
-                                res.setImageUrl(val.getUrl());
-                                return Mono.just(res);
-                            }
-                    );
-                }
-        ).flatMap(repository::insert);
+        return foodMono.flatMap(repository::insert);
     }
 
     public Mono<Food> updateFood(String foodId,Mono<Food> foodMono){

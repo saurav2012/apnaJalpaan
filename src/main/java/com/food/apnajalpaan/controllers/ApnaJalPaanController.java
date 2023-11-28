@@ -128,7 +128,7 @@ public class ApnaJalPaanController {
 
 
     @PostMapping(value = "/image/save",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Mono<Image> saveImage( @RequestPart("file")Mono<FilePart> part) throws IOException {
+    public Mono<Image> saveImage(@RequestPart("file") Mono<FilePart> part) throws IOException {
         return part.flatMap(file -> {
             try {
                 return imageService.saveImage(file);

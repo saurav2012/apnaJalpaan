@@ -124,65 +124,65 @@ public class UserService {
         return repository.findByUsername(username);
     }
 
-    @Scheduled(cron = "${cron.expression.one-day}", zone = "${cron.timezone}")
-    public Flux<Object> assignCouponIdsForFirstTime(){
-        List<String> couponCodeList = List.of("FLAT50","FLAT20","UPTO20");
-        repository.findAll().flatMap(
-            user -> {
-                if(user.getDoj().equalsIgnoreCase(LocalDate.now().toString())) {
-                    couponCodeList.forEach(
-                        code -> {
-                            couponService.findByCode(code).flatMap(
-                                coupon -> {
-                                    if(!user.getCouponIds().containsKey(coupon.getCouponId())){
-                                        user.getCouponIds().put(coupon.getCouponId(),new Status(false,false,LocalDate.now().plusDays(daysOfExp).toString()));
-                                        System.out.println("after update");
-                                    }
-                                    System.out.println("in coupon");
-                                    return Mono.just(coupon);
-                                }
-                            ).subscribe();
-                        }
-                    );
-                }
-                // set coupon is expired here!!
-                user.getCouponIds().values().forEach(id -> {
-                    id.setExpDate(LocalDate.now().plusDays(daysOfExp).toString());
-                });
-                return Mono.just(user);
-            }
-        ).flatMap(repository::save).subscribe();
-        return Flux.empty();
-    }
-    // everymonth for new or existing user remaining coupon....
-    @Scheduled(cron = "${cron.expression.one-month}", zone = "${cron.timezone}")
-    public Flux<Object> assignCouponIdsForEveryMonthTime() {
-        List<String> couponCodeList = List.of("FLAT10", "UPTO30", "BUY1000GET100");
-        repository.findAll().flatMap(
-                user -> {
-                    if (user.getDoj().equalsIgnoreCase(LocalDate.now().minusDays(30).toString())) {
-                        couponCodeList.forEach(
-                                code -> {
-                                    couponService.findByCode(code).flatMap(
-                                            coupon -> {
-                                                if (!user.getCouponIds().containsKey(coupon.getCouponId())) {
-                                                    user.getCouponIds().put(coupon.getCouponId(), new Status(false, false, LocalDate.now().plusDays(60).toString()));
-                                                    System.out.println("after update months");
-                                                }
-                                                System.out.println("in coupon months");
-                                                return Mono.just(coupon);
-                                            }
-                                    ).subscribe();
-                                }
-                        );
-                    }
-                    // set coupon is expired here!!
-                    user.getCouponIds().values().forEach(id -> {
-                        id.setExpDate(LocalDate.now().plusDays(daysOfExp).toString());
-                    });
-                    return Mono.just(user);
-                }
-        ).flatMap(repository::save).subscribe();
-        return Flux.empty();
-    }
+//    @Scheduled(cron = "${cron.expression.one-day}", zone = "${cron.timezone}")
+//    public Flux<Object> assignCouponIdsForFirstTime(){
+//        List<String> couponCodeList = List.of("FLAT50","FLAT20","UPTO20");
+//        repository.findAll().flatMap(
+//            user -> {
+//                if(user.getDoj().equalsIgnoreCase(LocalDate.now().toString())) {
+//                    couponCodeList.forEach(
+//                        code -> {
+//                            couponService.findByCode(code).flatMap(
+//                                coupon -> {
+//                                    if(!user.getCouponIds().containsKey(coupon.getCouponId())){
+//                                        user.getCouponIds().put(coupon.getCouponId(),new Status(false,false,LocalDate.now().plusDays(daysOfExp).toString()));
+//                                        System.out.println("after update");
+//                                    }
+//                                    System.out.println("in coupon");
+//                                    return Mono.just(coupon);
+//                                }
+//                            ).subscribe();
+//                        }
+//                    );
+//                }
+//                // set coupon is expired here!!
+//                user.getCouponIds().values().forEach(id -> {
+//                    id.setExpDate(LocalDate.now().plusDays(daysOfExp).toString());
+//                });
+//                return Mono.just(user);
+//            }
+//        ).flatMap(repository::save).subscribe();
+//        return Flux.empty();
+//    }
+//    // everymonth for new or existing user remaining coupon....
+//    @Scheduled(cron = "${cron.expression.one-month}", zone = "${cron.timezone}")
+//    public Flux<Object> assignCouponIdsForEveryMonthTime() {
+//        List<String> couponCodeList = List.of("FLAT10", "UPTO30", "BUY1000GET100");
+//        repository.findAll().flatMap(
+//                user -> {
+//                    if (user.getDoj().equalsIgnoreCase(LocalDate.now().minusDays(30).toString())) {
+//                        couponCodeList.forEach(
+//                                code -> {
+//                                    couponService.findByCode(code).flatMap(
+//                                            coupon -> {
+//                                                if (!user.getCouponIds().containsKey(coupon.getCouponId())) {
+//                                                    user.getCouponIds().put(coupon.getCouponId(), new Status(false, false, LocalDate.now().plusDays(60).toString()));
+//                                                    System.out.println("after update months");
+//                                                }
+//                                                System.out.println("in coupon months");
+//                                                return Mono.just(coupon);
+//                                            }
+//                                    ).subscribe();
+//                                }
+//                        );
+//                    }
+//                    // set coupon is expired here!!
+//                    user.getCouponIds().values().forEach(id -> {
+//                        id.setExpDate(LocalDate.now().plusDays(daysOfExp).toString());
+//                    });
+//                    return Mono.just(user);
+//                }
+//        ).flatMap(repository::save).subscribe();
+//        return Flux.empty();
+//    }
 }
