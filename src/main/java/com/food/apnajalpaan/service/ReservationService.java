@@ -90,23 +90,23 @@ public class ReservationService {
     public Flux<Reservation> getAllReservation() {
         return repository.findAll();
     }
-    public Flux<Reservation> getAllExpiredReservation(){
-        return repository.findAll().flatMap(
-                reservation -> {
-                    if(reservation.getIsExpired()) {
-                        return Mono.just(reservation);
-                    }else return Mono.empty();
-                }
-        );
+    public Flux<Reservation> getAllExpiredReservationByUsername(String username){
+        return userService.getUserByUsername(username).flatMapMany(user -> {
+            if (user.getRole().equals("ADMIN")) {
+                return repository.findAll().filter(Reservation::getIsExpired);
+            } else {
+                return repository.findByUsername(username).filter(Reservation::getIsExpired);
+            }
+        }).switchIfEmpty(Flux.empty());
     }
-    public Flux<Reservation> getAllActiveReservation(){
-        return repository.findAll().flatMap(
-                reservation -> {
-                    if(!reservation.getIsExpired()) {
-                        return Mono.just(reservation);
-                    }else return Mono.empty();
-                }
-        );
+    public Flux<Reservation> getAllActiveReservationByUsername(String username){
+        return userService.getUserByUsername(username).flatMapMany(user -> {
+            if (user.getRole().equals("ADMIN")) {
+                return repository.findAll().filter( reservation -> !reservation.getIsExpired());
+            } else {
+                return repository.findByUsername(username).filter( reservation -> !reservation.getIsExpired());
+            }
+        }).switchIfEmpty(Flux.empty());
     }
     public Mono<Reservation> getReservationByReservationId(String reservationId) {
         return repository.findById(reservationId);

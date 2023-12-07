@@ -185,26 +185,26 @@ public class ApnaJalPaanController {
     }
 
     @PostMapping("/reservation/approve/{reservationId}")
-    public Mono<Reservation> approveReservation(@RequestBody Mono<Reservation> reservationMono,@PathVariable String reservationId){
+    public Mono<Reservation> approveReservation(@RequestBody Mono<Reservation> reservationMono,@PathVariable String reservationId) {
         return reservationService.approveReservationByAdmin(reservationId,reservationMono);
     }
 
     @PostMapping("/reservation/deny/{reservationId}")
-    public Mono<Reservation> denyReservation(@RequestBody Mono<Reservation> reservationMono,@PathVariable String reservationId){
+    public Mono<Reservation> denyReservation(@RequestBody Mono<Reservation> reservationMono,@PathVariable String reservationId) {
         return reservationService.denyReservationByAdmin(reservationId,reservationMono);
     }
-    @GetMapping("/reservation/expired")
-    public Flux<Reservation> getExpiredReservationData(){
-        return reservationService.getAllExpiredReservation();
+    @GetMapping("/reservation/expired/{username}")
+    public Flux<Reservation> getExpiredReservationData(@PathVariable String username) {
+        return reservationService.getAllExpiredReservationByUsername(username);
     }
-    @GetMapping("/reservation/active")
-    public Flux<Reservation> getActiveReservationData(){
-        return reservationService.getAllActiveReservation();
+    @GetMapping("/reservation/active/{username}")
+    public Flux<Reservation> getActiveReservationData(@PathVariable String username) {
+        return reservationService.getAllActiveReservationByUsername(username);
     }
 
     // endpoint for order
     @PostMapping("/order/save")
-    public Mono<Order> saveOrder(@Valid @RequestBody Mono<Order> orderModelMono){
+    public Mono<Order> saveOrder(@Valid @RequestBody Mono<Order> orderModelMono) {
         return orderService.saveOrder(orderModelMono);
     }
     @GetMapping("/order")
